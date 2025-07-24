@@ -10,7 +10,7 @@ import { catchError, retry, map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
-  isDev = true;
+  isDev = false;
   isLoggedIn: any;
   rows_columns_list: any;
   LoggedInUserName: any;

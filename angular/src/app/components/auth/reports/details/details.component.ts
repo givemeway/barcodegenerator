@@ -47,6 +47,7 @@ export class DetailsComponent implements OnInit {
   rowsInaSheet: number = 0;
   page_margin = [];
   pdfRowColumn: any;
+  pageSize: any;
 
   public downloadAsPDF() {
     // const doc = new jsPDF();
@@ -97,6 +98,7 @@ export class DetailsComponent implements OnInit {
       this.page_margin = params['page_margin'];
       this.barcodesInSheet = parseInt(params['barcodesInSheet']);
       this.rowsInaSheet = parseInt(params['rowsInaSheet']);
+      this.pageSize = params['pageSize'];
       this.generateCodes();
     });
   }
@@ -183,34 +185,40 @@ export class DetailsComponent implements OnInit {
   }
 
   generateCodes() {
-    // var start = this.parse_name_number(this.startcode)
-    // var end = this.parse_name_number(this.endcode)
     var copies = parseInt(this.copies);
     var code_list = this.get_series(this.startcode, this.endcode, copies);
     var item_list = this.get_series(this.topstartcode, this.topendcode, copies);
     this.code_options['cols'] = this.columns;
     this.authservice.getBar(code_list, this.code_options, 0).subscribe(
       (data: any) => {
-        var temp;
         this.svg_list = [];
         this.rows_columns_list = [];
         this.pdfList = [];
-        const pdfTable = this.pdfTable.nativeElement;
-        // var html = htmlToPdfmake(pdfTable.innerHTML);
+        const [_top, _left, _right, _bottom] = this.page_margin.map((margin) =>
+          parseInt(margin)
+        );
+        const top = parseInt(this.page_margin[1]) * 2.835;
+        const left = parseInt(this.page_margin[0]) * 2.835;
+        const right = parseInt(this.page_margin[2]) * 2.835;
+        const bottom = parseInt(this.page_margin[3]) * 2.835;
+        console.log({ pageSize: this.pageSize });
         this.docDef = {
           content: [],
-          pageSize: 'A4',
-          pageMargins: [2, 4, 2, 5],
+          pageSize: this.pageSize,
+          pageMargins: [left, top, right, bottom],
         };
 
         for (let i = 0; i < data.length; i++) {
           const parser = new DOMParser();
           const svgDoc = parser.parseFromString(data[i], 'image/svg+xml');
 
-          let { objectURL, updatedSvgString, svgHeight, svgWidth } =
-            this.overLayTextOnSvg(svgDoc, item_list[i], {
+          let { objectURL, updatedSvgString } = this.overLayTextOnSvg(
+            svgDoc,
+            item_list[i],
+            {
               ...this.code_options,
-            });
+            }
+          );
 
           this.svg_list.push(objectURL);
           this.pdfList.push(updatedSvgString);
@@ -226,15 +234,6 @@ export class DetailsComponent implements OnInit {
         );
 
         var cols = [];
-        var idx = 0;
-        const [_top, _left, _right, _bottom] = this.page_margin.map((margin) =>
-          parseInt(margin)
-        );
-        // const [top, left, right, bottom] = [20, 0, 0, 0];
-        const top = parseInt(this.page_margin[1]) * 2.835; // Convert mm to points in pdfmake
-        const left = parseInt(this.page_margin[0]) * 2.835;
-        const right = parseInt(this.page_margin[2]) * 2.835;
-        const bottom = parseInt(this.page_margin[3]) * 2.835;
         for (const row of this.pdfRowColumn) {
           cols = [];
           for (const svg of row) {
@@ -249,34 +248,11 @@ export class DetailsComponent implements OnInit {
               height: height_in_pixels,
             });
           }
-          if (idx === 0 || idx % this.rowsInaSheet === 0) {
-            console.log(
-              'Inside the idx : ',
-              idx,
-              ' and modulus',
-              idx % this.rowsInaSheet,
-              ' and its type is: ',
-              typeof (idx % this.rowsInaSheet)
-            );
-            this.docDef.content.push({
-              columns: cols,
-              margin: [left, top, right, 0],
-              alignment: 'left',
-            });
-          } else if (idx === this.pdfRowColumn.length - 1) {
-            this.docDef.content.push({
-              columns: cols,
-              margin: [left, 0, right, bottom],
-              alignment: 'left',
-            });
-          } else {
-            this.docDef.content.push({
-              columns: cols,
-              margin: [left, 0, right, 0],
-              alignment: 'left',
-            });
-          }
-          idx += 1;
+          this.docDef.content.push({
+            columns: cols,
+            margin: [0, 0, 0, 0],
+            alignment: 'left',
+          });
         }
         // pdfMake.createPdf(this.docDef).download('barcodes.pdf');
         pdfMake.createPdf(this.docDef).print();

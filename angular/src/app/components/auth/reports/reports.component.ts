@@ -60,6 +60,7 @@ export class ReportsComponent implements OnInit {
   rows_columns_list: any;
   code_options: any = {};
   value: number = 1;
+  pageSize: string = 'A4';
 
   img_width: any;
   isCopies: boolean = false;
@@ -131,6 +132,7 @@ export class ReportsComponent implements OnInit {
         this.params = 'Example 123';
         this.textTop = 'Example 123 Top';
         this.page_margin = [0, 0, 0, 0];
+        this.pageSize = 'A4';
         this.code_options = {
           height: 40,
           fontSize: 11,
@@ -217,6 +219,7 @@ export class ReportsComponent implements OnInit {
         topstartcode: code.value.topstartcode,
         topendcode: code.value.topendcode,
         // col: Math.round(code.value.cols),
+        pageSize: this.pageSize,
         page_margin: this.page_margin,
         barcodesInSheet: this.barcodesInSheet,
         rowsInaSheet: this.barcodesInSheet / this.barCodeInaRow,
@@ -301,30 +304,35 @@ export class ReportsComponent implements OnInit {
       this.barCodeInaRow = Math.floor(this.paper_size.A4[0] / this.width);
       const rows = Math.floor(this.paper_size.A4[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'A3') {
       console.log(this.paper_size.A3);
       this.barCodeInaRow = Math.floor(this.paper_size.A3[0] / this.width);
       const rows = Math.floor(this.paper_size.A3[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'A5') {
       console.log(this.paper_size.A5);
       this.barCodeInaRow = Math.floor(this.paper_size.A5[0] / this.width);
       const rows = Math.floor(this.paper_size.A5[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'Letter') {
       console.log(this.paper_size.Letter);
       this.barCodeInaRow = Math.floor(this.paper_size.Letter[0] / this.width);
       const rows = Math.floor(this.paper_size.Letter[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'Legal') {
       console.log(this.paper_size.Legal);
       this.barCodeInaRow = Math.floor(this.paper_size.Legal[0] / this.width);
       const rows = Math.floor(this.paper_size.Legal[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'Executive') {
       console.log(this.paper_size.Executive);
@@ -333,6 +341,7 @@ export class ReportsComponent implements OnInit {
       );
       const rows = Math.floor(this.paper_size.Executive[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'JIS B4') {
       console.log(this.paper_size['JIS B4']);
@@ -341,6 +350,7 @@ export class ReportsComponent implements OnInit {
       );
       const rows = Math.floor(this.paper_size['JIS B4'][1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'JIS B5') {
       console.log(this.paper_size['JIS B5']);
@@ -349,12 +359,14 @@ export class ReportsComponent implements OnInit {
       );
       const rows = Math.floor(this.paper_size['JIS B5'][1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'Tabloid') {
       console.log(this.paper_size.Tabloid);
       this.barCodeInaRow = Math.floor(this.paper_size.Tabloid[0] / this.width);
       const rows = Math.floor(this.paper_size.Tabloid[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
     if (width?.value == 'Statement') {
       console.log(this.paper_size.Statement);
@@ -363,6 +375,7 @@ export class ReportsComponent implements OnInit {
       );
       const rows = Math.floor(this.paper_size.Statement[1] / this.height);
       this.barcodesInSheet = this.barCodeInaRow * rows;
+      this.pageSize = width?.value;
     }
   }
 }

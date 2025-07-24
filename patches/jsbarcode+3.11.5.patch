@@ -1,0 +1,84 @@
+diff --git a/node_modules/jsbarcode/src/JsBarcode.js b/node_modules/jsbarcode/src/JsBarcode.js
+index 8d45ce2..16b408f 100644
+--- a/node_modules/jsbarcode/src/JsBarcode.js
++++ b/node_modules/jsbarcode/src/JsBarcode.js
+@@ -44,7 +44,7 @@ let JsBarcode = function(element, text, options){
+ 
+ 		api.options(options)[options.format](text, options).render();
+ 	}
+-
++	console.log(api);
+ 	return api;
+ };
+ 
+diff --git a/node_modules/jsbarcode/src/renderers/canvas.js b/node_modules/jsbarcode/src/renderers/canvas.js
+index bba16d4..6d1f245 100644
+--- a/node_modules/jsbarcode/src/renderers/canvas.js
++++ b/node_modules/jsbarcode/src/renderers/canvas.js
+@@ -88,8 +88,8 @@ class CanvasRenderer{
+ 
+ 		// Draw the text if displayValue is set
+ 		if(options.displayValue){
+-			var x, y;
+-
++			var x, y,topY;
++			topY = options.marginTop + options.fontSize - options.textMargin;
+ 			if(options.textPosition == "top"){
+ 				y = options.marginTop + options.fontSize - options.textMargin;
+ 			}
+@@ -113,7 +113,8 @@ class CanvasRenderer{
+ 				x = encoding.width / 2;
+ 				ctx.textAlign = 'center';
+ 			}
+-
++			ctx.fillText(encoding.text,x,topY);
++			console.log({x,y,topY});
+ 			ctx.fillText(encoding.text, x, y);
+ 		}
+ 	}
+diff --git a/node_modules/jsbarcode/src/renderers/svg.js b/node_modules/jsbarcode/src/renderers/svg.js
+index 33d3b0b..9ce7567 100644
+--- a/node_modules/jsbarcode/src/renderers/svg.js
++++ b/node_modules/jsbarcode/src/renderers/svg.js
+@@ -84,15 +84,25 @@ class SVGRenderer{
+ 
+ 	drawSVGText(parent, options, encoding){
+ 		var textElem = this.document.createElementNS(svgns, 'text');
++		var textElem2 = this.document.createElementNS(svgns, 'text');
++
+ 
+ 		// Draw the text if displayValue is set
+ 		if(options.displayValue){
+-			var x, y;
++			var x, y,topY,bottomY;
++			
+ 
+ 			textElem.setAttribute("style",
+ 				"font:" + options.fontOptions + " " + options.fontSize + "px " + options.font
+ 			);
+ 
++			textElem2.setAttribute("style",
++				"font:" + options.fontOptions + " " + options.fontSize + "px " + options.font
++			);
++
++			topY = options.fontSize - options.textMargin;
++			bottomY = options.height + options.textMargin + options.fontSize;
++
+ 			if(options.textPosition == "top"){
+ 				y = options.fontSize - options.textMargin;
+ 			}
+@@ -117,9 +127,12 @@ class SVGRenderer{
+ 
+ 			textElem.setAttribute("x", x);
+ 			textElem.setAttribute("y", y);
+-
++			textElem2.setAttribute("x",x);
++			textElem2.setAttribute("y",topY);
++			console.log({x,y,topY});
++			textElem2.appendChild(this.document.createTextNode(encoding.text));
+ 			textElem.appendChild(this.document.createTextNode(encoding.text));
+-
++			parent.appendChild(textElem2);
+ 			parent.appendChild(textElem);
+ 		}
+ 	}

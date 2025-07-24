@@ -1,0 +1,691 @@
+<div class="container" *ngIf="!isGenerate">
+  <div>
+    <h2 class="h2" style="text-align: center">
+      Barcode Generator <span class="badge badge-secondary">code128</span>
+    </h2>
+  </div>
+  <div
+    class="row jumbotron"
+    style="background-color: rgba(111, 224, 139, 0.411)"
+  >
+    <div
+      class="col-md-6"
+      style="display: inline; border-right: 2px solid gray; padding: 0 5px"
+    >
+      <div class="row">
+        <div class="col-md-12">
+          <label class="h4 mark">Barcode Preview</label>
+        </div>
+      </div>
+      <div class="jumbotron" style="margin-bottom: 0">
+        <img [src]="new_svg" class="center-block img-fluid img-thumbnail" />
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-12">
+          <input
+            type="text"
+            class="form-control"
+            name="textTop"
+            [value]="textTop"
+            (keyup)="inputCode($event.target)"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <input
+            type="text"
+            class="form-control"
+            name="code"
+            [value]="params"
+            (keyup)="inputCode($event.target)"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label class="h4 mark">Barcode Options</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3"><label class="small">Width</label></div>
+        <div class="col-md-7 slider-container">
+          <input
+            id="bar-width"
+            type="range"
+            name="width"
+            min="1"
+            max="4"
+            step="1"
+            value="2"
+            (change)="inputCode($event.target)"
+          />
+        </div>
+        <div class="col-md-1" [innerHTML]="code_options['width']">
+          <p><label></label></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3"><label class="small">Height</label></div>
+        <div class="col-md-7 slider-container">
+          <input
+            id="bar-height"
+            type="range"
+            name="height"
+            min="10"
+            max="150"
+            step="1"
+            value="100"
+            (change)="inputCode($event.target)"
+          />
+        </div>
+        <div class="col-md-1" [innerHTML]="code_options['height']">
+          <p><span id="bar-height-display"></span></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3"><label class="small">Margin Top</label></div>
+        <div class="col-md-7 slider-container">
+          <input
+            id="bar-margin-top"
+            type="range"
+            name="marginTop"
+            min="1"
+            max="50"
+            step="1"
+            value="15"
+            (change)="inputCode($event.target)"
+          />
+        </div>
+        <div class="col-md-1" [innerHTML]="code_options['marginTop']">
+          <p><span id="bar-marginTop-display"></span></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3"><label class="small">Margin Bottom</label></div>
+        <div class="col-md-7 slider-container">
+          <input
+            id="bar-margin-bottom"
+            type="range"
+            name="marginBottom"
+            min="1"
+            max="50"
+            step="1"
+            value="5"
+            (change)="inputCode($event.target)"
+          />
+        </div>
+        <div class="col-md-1" [innerHTML]="code_options['marginBottom']">
+          <p><span id="bar-marginBottom-display"></span></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3"><label class="small">Margin Left</label></div>
+        <div class="col-md-7 slider-container">
+          <input
+            id="bar-margin-left"
+            type="range"
+            name="marginLeft"
+            min="1"
+            max="50"
+            step="1"
+            value="25"
+            (change)="inputCode($event.target)"
+          />
+        </div>
+        <div class="col-md-1" [innerHTML]="code_options['marginLeft']">
+          <p><span id="bar-marginLeft-display"></span></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3"><label class="small">Margin Right</label></div>
+        <div class="col-md-7 slider-container">
+          <input
+            id="bar-margin"
+            type="range"
+            name="marginRight"
+            min="1"
+            max="50"
+            step="1"
+            value="25"
+            (change)="inputCode($event.target)"
+          />
+        </div>
+        <div class="col-md-1" [innerHTML]="code_options['marginRight']">
+          <p><span id="bar-marginRight-display"></span></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <label class="small">Top Text Letter Spacing</label>
+        </div>
+        <div class="col-md-7 slider-container">
+          <input
+            id="bar-letterspacing"
+            type="range"
+            name="letterSpacing"
+            min="1"
+            max="5"
+            step="1"
+            value="1"
+            (change)="inputCode($event.target)"
+          />
+        </div>
+        <div class="col-md-1" [innerHTML]="code_options['letterSpacing']">
+          <p><span id="bar-letterSpacing-display"></span></p>
+        </div>
+      </div>
+
+      <div id="font-options">
+        <div class="row">
+          <div class="col-md-3 description-text">
+            <label class="small">Font Size</label>
+          </div>
+          <div class="col-md-7 slider-container">
+            <input
+              id="bar-fontSize"
+              name="fontSize"
+              type="range"
+              min="8"
+              max="36"
+              step="1"
+              value="11"
+              (change)="inputCode($event.target)"
+            />
+          </div>
+          <div
+            class="col-md-1 value-text"
+            [innerHTML]="code_options['fontSize']"
+          >
+            <p><span id="bar-fontSize-display"></span></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 description-text">
+            <label class="small">Text Margin</label>
+          </div>
+          <div class="col-md-7 slider-container">
+            <input
+              id="bar-text-margin"
+              name="textMargin"
+              type="range"
+              min="-15"
+              max="40"
+              step="1"
+              value="0"
+              (change)="inputCode($event.target)"
+            />
+          </div>
+          <div
+            class="col-md-1 value-text"
+            [innerHTML]="code_options['textMargin']"
+          >
+            <p><span id="bar-text-margin-display"></span></p>
+          </div>
+        </div>
+        <div class="row checkbox-options">
+          <div class="col-md-3 description-text">
+            <label class="small">Text Align</label>
+          </div>
+          <div class="col-md-7 center-text">
+            <div class="btn-group btn-group-md" role="toolbar">
+              <button
+                type="button"
+                class="btn btn-default text-align"
+                value="left"
+                name="textAlign"
+                (click)="inputCode($event.target)"
+              >
+                Left
+              </button>
+              <button
+                type="button"
+                class="btn btn-default text-align"
+                value="center"
+                name="textAlign"
+                (click)="inputCode($event.target)"
+              >
+                Center
+              </button>
+              <button
+                type="button"
+                class="btn btn-default text-align"
+                value="right"
+                name="textAlign"
+                (click)="inputCode($event.target)"
+              >
+                Right
+              </button>
+            </div>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="small"> Font </label>
+          </div>
+          <div class="col-md-4">
+            <select
+              class="form-control"
+              id="font"
+              style="font-family: monospace"
+              (change)="inputCode($event.target)"
+              name="fonts"
+            >
+              <option
+                [value]="font"
+                [style.font-family]="font"
+                selected="selected"
+                *ngFor="let font of fonts"
+              >
+                {{ font }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row checkbox-options">
+          <div class="col-md-3 description-text">
+            <label class="small">Font Options</label>
+          </div>
+          <div class="col-md-4">
+            <div class="btn-group btn-group-md" role="toolbar">
+              <button
+                type="button"
+                class="btn btn-default font-option"
+                name="fontOptions"
+                value="bold"
+                (click)="inputCode($event.target)"
+                style="font-weight: bold"
+              >
+                Bold
+              </button>
+              <button
+                type="button"
+                class="btn btn-default font-option"
+                name="fontOptions"
+                value="italic"
+                (click)="inputCode($event.target)"
+                style="font-style: italic"
+              >
+                Italic
+              </button>
+            </div>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="h4 mark"
+              >The Dimensions of the Barcode to be printed in mm</label
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="small"> Width (mm) </label>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="number"
+              #width="ngModel"
+              class="form-control"
+              name="width"
+              required
+              ngModel
+              [value]="width"
+            />
+            <span *ngIf="!width.valid && width.touched" style="color: red"
+              >Width can't be empty</span
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <label class="small"> Height (mm) </label>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="number"
+              #height="ngModel"
+              class="form-control"
+              name="height"
+              required
+              ngModel
+              [value]="height"
+            />
+            <span *ngIf="!height.valid && height.touched" style="color: red"
+              >Height can't be empty</span
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="h4 mark">Print Page Margins in mm</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="small"> Left </label>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="number"
+              #page_margin_left="ngModel"
+              class="form-control"
+              name="page_margin_left"
+              required
+              ngModel
+              [value]="page_margin[0]"
+              (change)="get_page_margin($event.target)"
+            />
+            <span
+              *ngIf="!page_margin_left.valid && page_margin_left.touched"
+              style="color: red"
+              >Left Margin can't be empty</span
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="small"> Top </label>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="number"
+              #page_margin_top="ngModel"
+              class="form-control"
+              name="page_margin_top"
+              required
+              ngModel
+              [value]="page_margin[1]"
+              (change)="get_page_margin($event.target)"
+            />
+            <span
+              *ngIf="!page_margin_top.valid && page_margin_top.touched"
+              style="color: red"
+              >Top Margin can't be empty</span
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="small"> Right </label>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="number"
+              #page_margin_right="ngModel"
+              class="form-control"
+              name="page_margin_right"
+              required
+              ngModel
+              [value]="page_margin[2]"
+              (change)="get_page_margin($event.target)"
+            />
+            <span
+              *ngIf="!page_margin_right.valid && page_margin_right.touched"
+              style="color: red"
+              >Right Margin can't be empty</span
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label class="small"> Bottom</label>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="number"
+              #page_margin_bottom="ngModel"
+              class="form-control"
+              name="page_margin_bottom"
+              required
+              ngModel
+              [value]="page_margin[3]"
+              (change)="get_page_margin($event.target)"
+            />
+            <span
+              *ngIf="!page_margin_bottom.valid && page_margin_bottom.touched"
+              style="color: red"
+              >Bottom Margin can't be empty</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="h4 mark">Generate Bulk Codes</h3>
+        </div>
+      </div>
+
+      <form (ngSubmit)="generateCodes(codes)" #codes="ngForm">
+        <div *ngIf="!isCopies">
+          <div class="row">
+            <div class="col-md-4">
+              <label class="small"> Starting code </label>
+            </div>
+            <div class="col-md-8">
+              <input
+                type="text"
+                #startcode="ngModel"
+                class="form-control"
+                name="startcode"
+                required
+                ngModel
+                [value]="startcode"
+              />
+              <span
+                *ngIf="!startcode.valid && startcode.touched"
+                style="color: red"
+                >Starting Code Can't be Blank</span
+              >
+            </div>
+          </div>
+          <br />
+
+          <div class="row">
+            <div class="col-md-4">
+              <label class="small">
+                Ending code<span class="badge badge-secondary"
+                  >Same series</span
+                >
+              </label>
+            </div>
+            <div class="col-md-8">
+              <input
+                type="text"
+                #endcode="ngModel"
+                class="form-control"
+                name="endcode"
+                required
+                ngModel
+                [value]="endcode"
+              />
+              <span *ngIf="!endcode.valid && endcode.touched" style="color: red"
+                >Ending Code Can't be blank</span
+              >
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-4">
+              <label class="small"> Top Text Starting code </label>
+            </div>
+            <div class="col-md-8">
+              <input
+                type="text"
+                #topstartcode="ngModel"
+                class="form-control"
+                name="topstartcode"
+                required
+                ngModel
+                [value]="topstartcode"
+              />
+              <span
+                *ngIf="!topstartcode.valid && topstartcode.touched"
+                style="color: red"
+                >Starting Code Can't be Blank</span
+              >
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-4">
+              <label class="small">
+                Top Text Ending code<span class="badge badge-secondary"
+                  >Same series</span
+                >
+              </label>
+            </div>
+            <div class="col-md-8">
+              <input
+                type="text"
+                #topendcode="ngModel"
+                class="form-control"
+                name="topendcode"
+                required
+                ngModel
+                [value]="topendcode"
+              />
+              <span
+                *ngIf="!topendcode.valid && topendcode.touched"
+                style="color: red"
+                >Ending Code Can't be blank</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="isCopies">
+          <div class="row">
+            <div class="col-md-4">
+              <label class="small"> Starting code </label>
+            </div>
+            <div class="col-md-8">
+              <input
+                type="text"
+                #startcode="ngModel"
+                class="form-control"
+                name="startcode"
+                required
+                ngModel
+                [value]="startcode"
+              />
+              <span
+                *ngIf="!startcode.valid && startcode.touched"
+                style="color: red"
+                >Starting Code Can't be Blank</span
+              >
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-4">
+              <label class="small"> Top code </label>
+            </div>
+            <div class="col-md-8">
+              <input
+                type="text"
+                #topstartcode="ngModel"
+                class="form-control"
+                name="topstartcode"
+                required
+                ngModel
+                [value]="topstartcode"
+              />
+              <span
+                *ngIf="!topstartcode.valid && topstartcode.touched"
+                style="color: red"
+                >Top Code Can't be Blank</span
+              >
+            </div>
+          </div>
+        </div>
+        <br />
+
+        <div class="row">
+          <div class="col-md-4">
+            <label class="small"> Copies </label>
+          </div>
+          <div class="col-md-3">
+            <input
+              type="number"
+              #truncate="ngModel"
+              class="form-control"
+              name="truncate"
+              required
+              ngModel
+              value="1"
+              (input)="isCopiesChange($event.target)"
+            />
+            <span *ngIf="!truncate.valid && truncate.touched" style="color: red"
+              >Required</span
+            >
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-4">
+            <label class="small"> Page Size </label>
+          </div>
+          <div class="col-md-3">
+            <select
+              class="form-control"
+              id="page_layout"
+              style="font-family: monospace"
+              (change)="get_layout($event.target)"
+              required
+            >
+              <option
+                [value]="col"
+                style="font-family: col"
+                selected="selected"
+                *ngFor="let col of print_layout"
+              >
+                {{ col }}
+              </option>
+            </select>
+
+            <div class="col-md-1"></div>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-4">
+            <label class="small"> Barcodes in a Row </label>
+          </div>
+          <div class="col-md-3">
+            <label class="small"> {{ barCodeInaRow }} </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <label class="small"> Barcodes in a Sheet </label>
+          </div>
+          <div class="col-md-3">
+            <label class="small"> {{ barcodesInSheet }} </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <button
+              type="submit"
+              [disabled]="!codes.valid"
+              class="btn btn-primary btn-block"
+            >
+              Generate
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

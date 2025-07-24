@@ -1,0 +1,60 @@
+#barcodeview{
+    width: 50%;
+    padding: 0px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+input :hover #bar-height{
+    cursor:pointer;
+    /* cursor: -webkit-grab; */
+    display: block;
+}
+
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+/* table th {
+    width: auto !important;
+} */
+/* #bar-width::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+  } */
+/*   
+  #bar-width::-moz-range-thumb {
+
+        width:15px;
+     height:15px;
+    } */
+/* #bar-width::-webkit-slider-thumb{
+    -webkit-appearance:button;
+    width:48px;
+    height: 48px;
+    z-index: 3;
+    position: relative;
+} */
+
+/* #bar-width-display{
+    height: 104px;
+    width:48px;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index:2;
+
+}
+#bar-width-display{
+    height: 35px;
+    width: 35px;
+    background-image: url("favicon.ico");
+    background-size: cover;
+    background-position: center;
+    border-radius:50%;
+    position: absolute;
+    bottom:0;
+} */

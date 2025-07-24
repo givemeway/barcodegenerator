@@ -1,0 +1,26 @@
+<!-- <button *ngIf="isGenerate" class="btn btn-primary" (click)="downloadAsPDF()">Export To PDF</button> -->
+<br *ngIf="isGenerate" />
+<br *ngIf="isGenerate" />
+<!-- <div class="container" id="pdfTable" #pdfTable *ngIf="isGenerate"> -->
+<div class="container" id="pdfTable" #pdfTable *ngIf="isGenerate">
+  <!-- <div class='row' *ngFor ="let row of rows_columns_list">
+            <div class="col-md-1" *ngFor ="let column of row"  >
+              <img [src]="column" class="img-fluid img-thumbnail">
+            </div>
+          </div> -->
+  <div class="row">
+    <table class="table table-hover table-bordered" style="width: auto">
+      <thead></thead>
+      <tbody id="pdfTable" #pdfTable>
+        <tr *ngFor="let row of rows_columns_list">
+          <!-- <td  [innerHTML]="col" *ngFor ="let col of row" class="img-fluid img-thumbnail">
+                      </td> -->
+          <td *ngFor="let col of row">
+            <img [src]="col" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- <button *ngIf="isGenerate" class="btn btn-primary" (click)="downloadAsPDF()">Export To PDF</button>       -->
